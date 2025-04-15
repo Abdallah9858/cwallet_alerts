@@ -1,0 +1,2 @@
+# m h  dom mon dow   command
+* * * * * /usr/bin/python3 /home/abdallah/cwallet_alerts/firewalluat.py >> /home/abdallah/cwallet_alerts/logs/firewall.log 2>&1

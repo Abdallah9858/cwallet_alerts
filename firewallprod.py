@@ -90,10 +90,9 @@ for vpn_config in root.findall(".//VPNIPSecConnection/Configuration"):
         except requests.exceptions.RequestException as e:
             print(f"Failed to send alert for VPN {vpn_name}: {e}")
 
- #######################################################################
- 
-  ##############    Gateway status    ##########################
-  #######################################################################
+   ##########################################################
+  ##############    Gateway status  #########################
+  ############################################################
 
 gateway_status = "UNKNOWN"
 for gateway in root.findall(".//GatewayConfiguration/Gateway"):

@@ -2,7 +2,6 @@ import paramiko
 import os
 import requests
 from twilio.rest import Client
-
 # --- CONFIG ---
 VM_IP = os.getenv("VM_IP", "192.168.5.12")
 USERNAME = os.getenv("VM_USERNAME", "cwadmin")
@@ -71,9 +70,6 @@ def run_command_on_vm():
 
     # Print statuses of monitored containers
     print("📋 Monitored Docker Container Status:")
-    for container in GET_CONTAINERS:
-        status = container_status.get(container, "Not Found")
-        print(f"{container}: {status}")
 
     # Check which are not running
     stopped = [
@@ -82,7 +78,7 @@ def run_command_on_vm():
     ]
 
     if stopped:
-        message = f"🚨 ALERT: This/These  container/s NOT running:\n" + "\n".join(stopped)
+        message = f"🚨 ALERT: qmp  container/s NOT running:\n" + "\n".join(stopped)
         send_teams_alert(message)
         send_sms_alert(message)
     else:

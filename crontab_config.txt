@@ -1,5 +1,0 @@
-# Run firewallprod.py every minute
-* * * * * /usr/bin/python3 /home/abdallah/cwallet_alerts/firewallprod.py >> /home/abdallah/cwallet_alerts/logs/firewall.log 2>&1
-
-# Run qmp.py every 5 minutes
-*/5 * * * * /usr/bin/python3 /home/abdallah/cwallet_alerts/qmpuat.py >> /home/abdallah/cwallet_alerts/logs/qmpuat.log 2>&1

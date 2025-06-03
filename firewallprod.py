@@ -33,8 +33,14 @@ TWILIO_FROM = "+12562902716"  # Twilio phone number
 SMS_TO = "+97450125624"  # Your phone number
 TWILIO_URL = f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_SID}/Messages.json"
 
-# Check all interfaces
-# List of ports to exclude
+########################################################################### 
+
+  ##################        Check the interfaces   #######################
+
+  ###########################################################################
+
+
+     # List of ports to exclude
 excluded_ports = ["Port1","PortF1", "PortF2", "PortMGMT"]
 for interface in root.findall("Interface"):
     port_name = interface.find("Name").text
@@ -43,7 +49,7 @@ for interface in root.findall("Interface"):
         continue
     status = interface.find("Status").text
     if status != "Connected, 1000 Mbps - Full Duplex, FEC off":
-        message = f"Alert: {port_name} is NOT connected! Current status: {status}"
+        message = f"🚨 Alert: {port_name} is NOT connected! Current status: {status}"
         # Send SMS via Twilio
         sms_data = {
             "From": TWILIO_FROM,
@@ -75,7 +81,7 @@ for vpn_config in root.findall(".//VPNIPSecConnection/Configuration"):
     vpn_status = vpn_config.findtext("Status", default="Unknown")
 
     # Alert only if status is not "Active"
-    if vpn_status != "2":
+     if vpn_status != "2"
         message = f"🚨 VPN Alert: {vpn_name} is NOT active! Current status: {vpn_status}"
         
         sms_data = {
@@ -91,9 +97,8 @@ for vpn_config in root.findall(".//VPNIPSecConnection/Configuration"):
             print(f"Failed to send alert for VPN {vpn_name}: {e}")
 
    ##########################################################
-  ##############    Gateway status  #########################
-  ############################################################
-
+  ##############  ADSL  Gateway status  #########################
+  ###############################################################
 gateway_status = "UNKNOWN"
 for gateway in root.findall(".//GatewayConfiguration/Gateway"):
     name = gateway.findtext("Name")
@@ -102,7 +107,7 @@ for gateway in root.findall(".//GatewayConfiguration/Gateway"):
         break
 
 if gateway_status != "Active":
-    alert_msg = f"⚠️ ADSL Gateway is NOT active! Current status: {gateway_status}"
+    alert_msg = f"⚠ ADSL Gateway is NOT active! Current status: {gateway_status}"
     try:
         requests.post(TWILIO_URL, data={"From": TWILIO_FROM, "To": SMS_TO, "Body": alert_msg}, auth=(TWILIO_SID, TWILIO_AUTH_TOKEN))
         requests.post(TEAMS_WEBHOOK_URL, json={"text": alert_msg})
@@ -111,3 +116,4 @@ if gateway_status != "Active":
         print(f"Failed to send ADSL alert: {e}")
 else:
     print("✅ ADSL gateway is active.")
+

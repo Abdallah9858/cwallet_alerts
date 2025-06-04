@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'ENV', choices: ['uat', 'prod'], description: 'Choose environment to deploy')
+        booleanParam(name: 'DEPLOY', defaultValue: false, description: 'Deploy after build?')
+    }
+
+    environment {
+        IMAGE_NAME = "cwallet_alerts"
+    }
+
+        stage('Checkout Code') {
+    steps {
+        script {
+            def branch = (params.ENV == 'prod') ? 'main' : 'uat'
+            git branch: branch,
+                url: 'git@github.com:Abdallah9858/cwallet_alerts.git',
+                credentialsId: 'github-ssh-key'  // <-- your Jenkins SSH credentials ID
+        }
+    }
+}
+
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                  echo "Building Docker image: ${IMAGE_NAME}:${params.ENV}"
+                   sh "docker build -t ${IMAGE_NAME}:${params.ENV} -f ./Dockerfile ${WORKSPACE}"
+                }
+            }
+        }
+
+        stage('Optional Deploy') {
+            when {
+                expression { return params.DEPLOY }
+            }
+            steps {
+                script {
+                    def containerName = "alerts_${params.ENV}"
+                    sh """
+                        docker stop ${containerName} || true
+                        docker rm ${containerName} || true
+                        docker run -d --restart unless-stopped --name ${containerName} ${IMAGE_NAME}:${params.ENV}
+                    """
+                }
+            }
+        }
+    }
+}
+

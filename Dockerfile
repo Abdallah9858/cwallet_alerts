@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install flask requests azure-identity azure-mgmt
 
 CMD ["python","firewall.py", "azurealerts.py"]
 

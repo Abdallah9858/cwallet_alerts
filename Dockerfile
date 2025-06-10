@@ -14,11 +14,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY requirements.txt .
 
-RUN pip install --upgrade pip
+# Install Cython<3.0.0 before PyYAML
+RUN pip install "Cython<3.0.0"
+RUN pip install --no-build-isolation PyYAML==5.4.1
 RUN pip install -r requirements.txt
+
 RUN apt-get update && apt-get install -y python3-debian
 
 COPY . .
 
 CMD ["python", "firewall.py", "azurealerts.py"]
-

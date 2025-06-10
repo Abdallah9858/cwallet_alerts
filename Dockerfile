@@ -1,19 +1,23 @@
-# Use official Python 3.11 slim image
 FROM python:3.11-slim
 
-# Set working directory inside the container
 WORKDIR /app
 
-# Copy only requirements.txt first (to leverage Docker layer caching)
+# Install system build dependencies needed for PyGObject and pycairo
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    pkg-config \
+    libcairo2-dev \
+    libgirepository1.0-dev \
+    python3-dev \
+    meson \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt .
 
-# Upgrade pip and install dependencies
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# Copy the rest of the application files
 COPY . .
 
-# Default command to run your scripts
 CMD ["python", "firewall.py", "azurealerts.py"]
 

@@ -20,6 +20,7 @@ constantly==15.1.0
 cryptography==3.4.8
 dbus-python==1.2.18
 distro==1.7.0
+python-debian==0.1.43
 distro-info
 frozenlist==1.6.0
 httplib2==0.20.2

@@ -18,7 +18,7 @@ COPY requirements.txt .
 RUN pip install "Cython<3.0.0"
 RUN pip install --no-build-isolation PyYAML==5.4.1
 RUN pip install -r requirements.txt
-
+RUN apt-get update && apt-get install -y libsystemd-dev pkg-config
 RUN apt-get update && apt-get install -y python3-debian
 
 COPY . .

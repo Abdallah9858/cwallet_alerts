@@ -10,23 +10,23 @@ pipeline {
         IMAGE_NAME = "cwallet_alerts"
     }
 
+    stages {
         stage('Checkout Code') {
-    steps {
-        script {
-            def branch = (params.ENV == 'prod') ? 'main' : 'uat'
-            git branch: branch,
-                url: 'git@github.com:Abdallah9858/cwallet_alerts.git',
-                credentialsId: 'github-ssh-key'  // <-- your Jenkins SSH credentials ID
+            steps {
+                script {
+                    def branch = (params.ENV == 'prod') ? 'main' : 'uat'
+                    git branch: branch,
+                        url: 'git@github.com:Abdallah9858/cwallet_alerts.git',
+                        credentialsId: 'github-ssh-key'  // <-- make sure this ID exists in Jenkins credentials
+                }
+            }
         }
-    }
-}
-
 
         stage('Build Docker Image') {
             steps {
                 script {
-                  echo "Building Docker image: ${IMAGE_NAME}:${params.ENV}"
-                   sh "docker build -t ${IMAGE_NAME}:${params.ENV} -f ./Dockerfile ${WORKSPACE}"
+                    echo "Building Docker image: ${IMAGE_NAME}:${params.ENV}"
+                    sh "docker build -t ${IMAGE_NAME}:${params.ENV} -f ./Dockerfile ${WORKSPACE}"
                 }
             }
         }
@@ -48,4 +48,3 @@ pipeline {
         }
     }
 }
-
